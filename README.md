@@ -1,381 +1,100 @@
-# Campus Noticeboard Automation Pipeline
+# Campus Noticeboard CI/CD Pipeline
 
-A modern, containerized university digital notice board platform built with a professional CI/CD pipeline, automated linting, and DevOps best practices. This project demonstrates enterprise-grade development practices including continuous integration, code quality validation, and containerized deployment.
+A responsive, static campus information portal backed by an automated quality-gated delivery workflow. The project centralizes notices, examination information, admissions guidance, and contact details while demonstrating repeatable validation, bundling, and container build practices.
 
-## Project Highlights
+## What the Project Solves
 
-- **Modern Design System** — Professional, responsive UI with smooth animations and accessibility features
-- **Fully Automated CI/CD** — 3-stage GitHub Actions pipeline (lint → build → docker)
-- **Code Quality** — HTMLHint and Stylelint validation on every commit
-- **Production-Ready** — Docker containerization with nginx for scalable deployment
-- **GitFlow Discipline** — Strict branching model with protection rules and PR-based workflows
-- **Build Optimization** — Parcel bundler with minification and caching strategies
+Campus information is often distributed across disconnected channels. This project provides a single browser-based noticeboard with dedicated pages for announcements, examinations, admissions, and contact information. Its automation pipeline reduces manual validation by enforcing HTML and CSS standards before accepting a successful application build or container build.
 
-## Tech Stack
+## Implementation
 
-| Component           | Version               | Purpose                    |
-| ------------------- | --------------------- | -------------------------- |
-| **Runtime**         | Node.js 20            | Build and test environment |
-| **Build Tool**      | Parcel 2.15.4         | Bundle and minify assets   |
-| **HTML Validator**  | HTMLHint 1.8.0        | Semantic HTML linting      |
-| **CSS Validator**   | Stylelint 16.22.0     | CSS code quality           |
-| **Container**       | Docker + Nginx Alpine | Production deployment      |
-| **CI/CD**           | GitHub Actions        | Automated pipelines        |
-| **Version Control** | Git + GitFlow         | Repository management      |
+- Five semantic HTML pages with a shared responsive CSS design system
+- Parcel development server and optimized static-site build
+- HTMLHint and Stylelint quality gates
+- GitHub Actions jobs ordered as `lint -> build -> docker`
+- Reproducible dependency installation through `npm ci` and `package-lock.json`
+- Docker image based on `nginx:alpine` for serving the static source on port 80
+- GitFlow-oriented development history using `main`, `develop`, and feature branches
 
-## Features
+The workflow runs for pushes to `develop` and pull requests targeting `develop`. The Docker job validates that the web application can be packaged as an nginx image; the current workflow does not publish the image to a registry or deploy it to an environment.
 
-### Design & User Experience
+## Technology Stack
 
-- **Responsive Layout** — Mobile-first design with breakpoints at 768px (tablet) and 480px (mobile)
-- **Modern Color Palette** — Professional blues, purples, and neutrals with CSS variables
-- **Smooth Animations** — Fade-in, slide-down, and pulse effects with 250ms transitions
-- **Accessibility** — WCAG-compliant contrast ratios, focus states, reduced-motion support
-- **Dark Mode** — Native support via `prefers-color-scheme` media query
-- **Card-Based Layout** — Flexbox containers with hover elevation effects
-
-### Development Tools
-
-- **Strict Validation** — HTML semantic checks + CSS modern notation enforcement
-- **Hot Reload** — Development server with auto-refresh (`npm run dev`)
-- **Minification** — Automatic asset optimization for production
-- **Caching** — npm cache in CI for 30% faster builds
-
-### DevOps Infrastructure
-
-- **Multi-Stage Pipeline** — Lint → Build → Docker with dependency ordering
-- **Branch Protection** — Develop-only CI triggers, no direct commits to main/develop
-- **Containerization** — Lightweight nginx:alpine image (~20MB) with proper port exposure
-- **Artifact Tracking** — Build logs and Docker image versioning
+| Area | Technology | Role |
+| --- | --- | --- |
+| Front end | HTML5, CSS3 | Static content and responsive presentation |
+| Runtime | Node.js 20 | CI and local tooling environment |
+| Build | Parcel 2 | Bundling and production asset optimization |
+| Quality | HTMLHint, Stylelint | Markup and stylesheet validation |
+| Automation | GitHub Actions | Ordered CI quality gates |
+| Container | Docker, Nginx Alpine | Portable static-site serving image |
+| Version control | Git, GitFlow | Feature integration and release history |
 
 ## Project Structure
 
-```
-campus-noticeboard-automation-pipeline/
-├── .github/
-│   └── workflows/
-│       └── ci.yml                   # 3-job GitHub Actions pipeline
-├── src/                             # HTML pages
-│   ├── index.html                   # Home page
-│   ├── notices.html                 # Notice board
-│   ├── exams.html                   # Exam schedule
-│   ├── admissions.html              # Admissions info
-│   └── contact.html                 # Contact page
-├── styles/
-│   └── style.css                    # Modern design system (6.47 kB minified)
-├── .htmlhintrc                      # HTML validation rules
-├── .stylelintrc.json                # CSS validation rules
-├── Dockerfile                       # nginx container definition
-├── package.json                     # Node.js project manifest
-├── .gitignore                       # Git exclusions (node_modules, dist, .parcel-cache)
-└── README.md                        # This file
+```text
+.
+|-- .github/workflows/ci.yml  # Lint, build, and Docker validation jobs
+|-- src/                      # Five HTML pages
+|-- styles/style.css          # Shared responsive design system
+|-- .htmlhintrc               # HTML quality rules
+|-- .stylelintrc.json         # CSS quality rules
+|-- Dockerfile                # Nginx image definition
+|-- package.json              # Scripts and development dependencies
+|-- package-lock.json         # Reproducible dependency resolution
+`-- BRANCH_STRUCTURE.md       # Historical branching model
 ```
 
-## Quick Start
+Generated directories such as `node_modules/`, `dist/`, and `.parcel-cache/` are intentionally excluded from version control.
+
+## Local Development
 
 ### Prerequisites
 
-- Node.js 20+ ([Download](https://nodejs.org/))
-- Docker Desktop ([Download](https://www.docker.com/products/docker-desktop))
 - Git
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/shaafeadawood/campus-noticeboard-automation-pipeline.git
-cd campus-noticeboard-automation-pipeline
-
-# Install dependencies
-npm install
-
-# Verify linting and build
-npm run lint:html && npm run lint:css && npm run build
-```
-
-### Development
+- Node.js 20 or a compatible supported version
+- Docker, only when building or running the container
 
 ```bash
-# Start local dev server with hot reload
+git clone https://github.com/raafea24/campus-noticeboard-cicd-pipeline.git
+cd campus-noticeboard-cicd-pipeline
+npm ci
 npm run dev
-# Opens http://localhost:1234 automatically
-
-# Run individual linters
-npm run lint:html    # Check HTML semantic rules
-npm run lint:css     # Check CSS quality
-
-# Build for production
-npm run build        # Creates dist/ directory with minified assets
 ```
 
-## Docker Deployment
+Parcel opens the local development server at `http://localhost:1234` by default.
 
-### Build Image
+## Quality and Build Commands
+
+```bash
+npm run lint:html
+npm run lint:css
+npm run build
+```
+
+`npm run build` writes generated assets to `dist/`. The CI workflow requires both linters to pass before the Parcel build begins, and requires the build job to pass before validating the Docker image.
+
+## Container Usage
+
+The Dockerfile serves the tracked HTML and CSS directly through nginx:
 
 ```bash
 docker build -t campus-noticeboard:latest .
+docker run --rm -p 8080:80 campus-noticeboard:latest
 ```
 
-### Run Container
+The site is then available at `http://localhost:8080`.
 
-```bash
-# Development/testing
-docker run -d -p 8080:80 --name noticeboard campus-noticeboard:latest
+## CI Workflow
 
-# Production (detached, restart policy)
-docker run -d \
-  -p 80:80 \
-  --name noticeboard \
-  --restart unless-stopped \
-  campus-noticeboard:latest
-```
+The workflow at `.github/workflows/ci.yml` contains three dependent jobs:
 
-### Access Container
+1. **Lint** — checks all HTML with HTMLHint and the shared stylesheet with Stylelint.
+2. **Build** — runs the Parcel production build after linting succeeds.
+3. **Docker** — builds the nginx image after the application build succeeds.
 
-- Local: http://localhost:8080
-- Pages available:
-  - `/index.html` - Home
-  - `/notices.html` - Notices
-  - `/exams.html` - Exams
-  - `/admissions.html` - Admissions
-  - `/contact.html` - Contact
+Each Node.js job uses the lockfile-aware npm cache and installs dependencies with `npm ci`. The workflow deliberately stops at container build validation; registry publishing and environment deployment require a separate, credential-aware release process.
 
-### Cleanup
+## Branching Model
 
-```bash
-docker stop noticeboard
-docker rm noticeboard
-```
-
-## GitFlow Workflow
-
-This project implements a strict GitFlow branching model:
-
-### Branch Structure
-
-| Branch      | Purpose             | Protection                      |
-| ----------- | ------------------- | ------------------------------- |
-| `main`      | Production releases | Protected, no direct commits    |
-| `develop`   | Integration/staging | Protected, PR-only merges       |
-| `feature/*` | Feature development | Regular branches, PR to develop |
-
-### Development Workflow
-
-```bash
-# 1. Create feature branch from develop
-git checkout develop
-git pull origin develop
-git checkout -b feature/your-feature-name
-
-# 2. Make changes and commit
-git add .
-git commit -m "Add your feature"
-
-# 3. Push to remote
-git push origin feature/your-feature-name
-
-# 4. Create Pull Request to develop (requires approval)
-# CI pipeline runs automatically
-# Code review conducted
-# Merge to develop (no-ff)
-
-# 5. Delete feature branch after merge
-git branch -d feature/your-feature-name
-```
-
-### Workflow Rules
-
-- All feature work must be on `feature/*` branches
-- Merge to `develop` only via Pull Request
-- No direct commits to `main` or `develop`
-- CI pipeline must pass before merge approval
-
-## CI/CD Pipeline
-
-The GitHub Actions workflow (`.github/workflows/ci.yml`) provides automated quality gates across three distinct stages:
-
-### Stage 1: Lint Validation
-
-Runs on all push and pull request events targeting the `develop` branch.
-
-```bash
-# HTML validation
-htmlhint "src/**/*.html"
-
-# CSS validation
-stylelint "styles/**/*.css"
-```
-
-Validation rules:
-
-- Semantic HTML structure requirements enforced
-- CSS formatting and modern notation checked
-- Fails pipeline if violations detected
-
-### Stage 2: Build Optimization
-
-Depends on successful lint completion.
-
-```bash
-# Minify and bundle assets
-parcel build src/*.html --dist-dir dist
-```
-
-Output:
-
-- Optimized `dist/` directory created
-- CSS minified to 6.47 kB production size
-- HTML pages compiled and bundled
-
-### Stage 3: Docker Container Build
-
-Depends on successful build completion.
-
-```bash
-# Build container image
-docker build -t campus-noticeboard-automation-pipeline:ci .
-```
-
-Result:
-
-- Lightweight nginx:alpine image created
-- Ready for staging and production deployment
-
-### Pipeline Configuration
-
-**Triggers:**
-
-- Push events to `develop` branch
-- Pull requests targeting `develop` branch
-- No automatic triggers on `main` branch (prevents accidental deployments)
-
-**Viewing Pipeline Status:**
-
-1. Navigate to Actions tab on GitHub repository
-2. Select CI workflow from the list
-3. Click latest run to view detailed job logs
-
-## Code Quality Standards
-
-### HTML Validation (.htmlhintrc)
-
-Semantic HTML requirements:
-
-- Lowercase tag and attribute names enforced
-- Proper tag pairing and nesting validation
-- DOCTYPE declaration must appear first
-- Double-quoted attribute values required
-- No inline styles permitted (use external CSS classes)
-- Unique element IDs throughout document
-- Images require descriptive alt text
-
-### CSS Validation (.stylelintrc.json)
-
-Modern CSS standards applied:
-
-- Modern color notation (rgb with `/` syntax)
-- Short hex color code format required
-- No redundant longhand properties
-- No descending specificity violations
-- Consistent formatting and spacing
-
-## Linting and Code Fixing
-
-### Validate Your Code
-
-```bash
-npm run lint:html    # Report HTML issues
-npm run lint:css     # Report CSS issues
-npm run build        # Test full build pipeline
-```
-
-### Common Issues and Solutions
-
-**Inline Styles**
-
-```bash
-# Incorrect approach
-<h2 style="color: blue;">Title</h2>
-
-# Correct approach
-<h2 class="primary-text">Title</h2>
-```
-
-**Font Family Quotes**
-
-```css
-/* Incorrect */
-font-family: Segoe UI;
-
-/* Correct */
-font-family: "Segoe UI";
-```
-
-**Color Notation**
-
-```css
-/* Incorrect (deprecated) */
-rgba(0, 0, 0, 0.5)
-
-/* Correct (modern) */
-rgb(0 0 0 / 50%)
-```
-
-## Responsive Design
-
-### Breakpoint Structure
-
-```css
-/* Desktop (default) */
-/* Tablet (≤ 768px) */
-@media (width <= 768px) { ... }
-
-/* Mobile (≤ 480px) */
-@media (width <= 480px) { ... }
-```
-
-## Troubleshooting
-
-Common issues and their solutions:
-
-| Issue                        | Solution                                                                                 |
-| ---------------------------- | ---------------------------------------------------------------------------------------- |
-| `npm install` fails          | Delete `node_modules/` and `package-lock.json`, then reinstall                           |
-| Linting errors appear        | Run `npm run lint:html` and `npm run lint:css` for detailed output                       |
-| Build process fails          | Check `.parcel-cache/` is in `.gitignore`, then delete cache: `rm -rf .parcel-cache/`    |
-| Docker container won't start | Verify port 8080 is available: `lsof -i :8080`                                           |
-| CSS changes not visible      | Clear browser cache (Ctrl+Shift+R) or open in incognito mode                             |
-| Footer positioning incorrect | Verify `styles/style.css` has flexbox: `body { display: flex; flex-direction: column; }` |
-
-## Configuration Files
-
-### .htmlhintrc — HTML Validation Rules
-
-Defines 10 semantic validation rules for proper HTML structure and best practices.
-
-### .stylelintrc.json — CSS Validation Rules
-
-Extends `stylelint-config-standard` configuration with modern CSS validation rules.
-
-### Dockerfile — Container Definition
-
-- Base image: `nginx:alpine` (20MB, production-optimized)
-- Copies source files to nginx document root
-- Exposes port 80 for web traffic
-
-### package.json — Node.js Project Configuration
-
-- Production dependencies: None (static site only)
-- Development dependencies: Parcel, HTMLHint, Stylelint
-- Available scripts: `dev`, `build`, `lint:html`, `lint:css`
-
-## Contributing Guidelines
-
-1. Create a feature branch from develop: `git checkout -b feature/description`
-2. Make code changes and commit with clear messages
-3. Ensure HTML and CSS pass linting validations
-4. Test locally: `npm run dev` and verify all pages render correctly
-5. Push branch to remote: `git push origin feature/description`
-6. Create Pull Request with detailed description of changes
-7. Address any review feedback from team members
-8. After approval, merge to develop branch (automatic deployment)
+The repository history follows a GitFlow-style integration path: feature branches merge into `develop`, and validated integration work is promoted to `main`. See [BRANCH_STRUCTURE.md](BRANCH_STRUCTURE.md) for the roles reflected in the project history.
